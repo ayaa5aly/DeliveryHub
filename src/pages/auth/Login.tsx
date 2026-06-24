@@ -15,7 +15,7 @@ export default function Login() {
   const { isLoading, error, isAuthenticated, dismissError } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const from = searchParams.get("from") ?? "/dashboard";
+  const from = searchParams?.get("from") ?? "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

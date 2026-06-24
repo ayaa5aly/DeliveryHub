@@ -14,7 +14,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace(`/login?from=${encodeURIComponent(pathname)}`);
+      router.replace(`/login?from=${encodeURIComponent(pathname ?? "/")}`);
     }
   }, [isAuthenticated, isLoading, router, pathname]);
 

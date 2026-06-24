@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { useUI } from "@/hooks/useUI";
 import { ar } from "./locales/ar";
