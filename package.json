@@ -2,10 +2,11 @@
   "name": "deliveryhub",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
@@ -15,12 +16,11 @@
     "axios": "^1.17.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.17.0",
-    "next": "16.2.7",
-    "next-intl": "^4.13.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.77.0",
     "react-redux": "^9.3.0",
+    "react-router-dom": "^7.6.3",
     "tailwind-merge": "^3.6.0",
     "yup": "^1.7.1",
     "zod": "^4.4.3"
@@ -30,9 +30,14 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.5.2",
     "eslint": "^9",
-    "eslint-config-next": "16.2.7",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.2.0",
+    "typescript-eslint": "^8.34.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^6.3.5"
   }
 }
