@@ -1,48 +1,18 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { getLocale, getMessages } from "next-intl/server";
-import ConditionalShell from "./ConditionalShell";
-import { getLocaleDirection, type AppLocale } from "@/i18n/config";
-import { AppProviders } from "@/shared/providers/app-providers";
-import {
-  themeCookieName,
-  type Theme,
-} from "@/shared/config/theme";
-import "./globals.css";
+import App from "@/App";
+import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "DeliveryHub",
-  description: "Smart shipping platform in Egypt",
+  title: "DeliveryHub Admin",
+  description: "DeliveryHub administration panel",
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [locale, messages, cookieStore] = await Promise.all([
-    getLocale(),
-    getMessages(),
-    cookies(),
-  ]);
-  const savedTheme = cookieStore.get(themeCookieName)?.value;
-  const theme: Theme = savedTheme === "dark" ? "dark" : "light";
-  const direction = getLocaleDirection(locale as AppLocale);
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang={locale}
-      dir={direction}
-      className={theme === "dark" ? "dark" : undefined}
-      style={{ colorScheme: theme }}
-      suppressHydrationWarning
-    >
+    <html lang="en">
       <body>
-        <AppProviders locale={locale} messages={messages} theme={theme}>
-          <ConditionalShell>{children}</ConditionalShell>
-        </AppProviders>
+        <App>{children}</App>
       </body>
     </html>
   );
 }
-
