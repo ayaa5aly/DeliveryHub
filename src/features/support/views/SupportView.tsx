@@ -15,6 +15,7 @@ type TicketFormValues = z.infer<typeof supportTicketSchema>;
 export default function SupportView() {
   const t = useTranslations("customer.support");
   const validation = useTranslations("validation");
+  const commonT = useTranslations("common");
   const locale = useLocale();
   const isRTL = locale === "ar";
 
@@ -165,7 +166,7 @@ export default function SupportView() {
 
             <div className="flex flex-col gap-3.5">
               {loadingTickets ? (
-                <div className="text-center py-4 text-xs text-zinc-500">{t("loading") || "Loading..."}</div>
+                <div className="text-center py-4 text-xs text-zinc-500">{commonT("loading")}</div>
               ) : tickets.length === 0 ? (
                 <div className="text-center py-4 text-xs text-zinc-500">
                   {isRTL ? "لا توجد تذاكر دعم حالية" : "No support tickets found"}
@@ -297,7 +298,7 @@ export default function SupportView() {
                 disabled={submittingTicket}
                 className="w-full mt-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white font-semibold py-2.5 rounded-lg text-xs transition-all duration-200 shadow-md focus:outline-none"
               >
-                {submittingTicket ? "..." : t("submitTicket")}
+                {submittingTicket ? commonT("loading") : t("submitTicket")}
               </button>
             </form>
           </div>

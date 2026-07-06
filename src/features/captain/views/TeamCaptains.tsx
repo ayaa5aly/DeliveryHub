@@ -52,11 +52,11 @@ function StatusCell({ captain, t }: { captain: Captain; t: any }) {
         value={captain.status}
         disabled={updating}
         onChange={handleStatusChange}
-        className="bg-transparent border-none text-xs font-semibold text-[var(--color-text-main)] hover:bg-zinc-800/40 rounded px-1.5 py-0.5 cursor-pointer focus:outline-none focus:ring-1 focus:ring-zinc-700"
+        className="bg-transparent border-none text-xs font-semibold text-[var(--color-text-main)] hover:bg-[var(--color-bg-muted)] rounded px-1.5 py-0.5 cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500"
       >
-        <option value="available" className="bg-zinc-950 text-zinc-100">{t('available')}</option>
-        <option value="busy" className="bg-zinc-950 text-zinc-100">{t('busy')}</option>
-        <option value="offline" className="bg-zinc-950 text-zinc-100">{t('offline')}</option>
+        <option value="available" className="bg-[var(--color-bg-card)] text-[var(--color-text-main)]">{t('available')}</option>
+        <option value="busy" className="bg-[var(--color-bg-card)] text-[var(--color-text-main)]">{t('busy')}</option>
+        <option value="offline" className="bg-[var(--color-bg-card)] text-[var(--color-text-main)]">{t('offline')}</option>
       </select>
     </div>
   )
@@ -109,13 +109,13 @@ export default function TeamCaptains() {
 
     // Validation
     if (!fullName || !email || !phone || !plateNumber) {
-      setErrorMsg(isRTL ? 'يرجى ملء جميع الحقول المطلوبة' : 'Please fill all required fields')
+      setErrorMsg(t('fillRequiredFields'))
       return
     }
 
     const phonePattern = /^01[0125][0-9]{8}$/
     if (!phonePattern.test(phone)) {
-      setErrorMsg(isRTL ? 'رقم الهاتف يجب أن يكون رقم مصري صحيح (مثال: 01012345678)' : 'Phone must be a valid Egyptian mobile number (e.g. 01012345678)')
+      setErrorMsg(t('invalidPhone'))
       return
     }
 
@@ -137,7 +137,7 @@ export default function TeamCaptains() {
       }
     } catch (err: any) {
       console.error(err)
-      const msg = err?.response?.data?.message || err?.message || (isRTL ? 'حدث خطأ أثناء إضافة الكابتن' : 'Failed to add captain')
+      const msg = err?.response?.data?.message || err?.message || t('addCaptainError')
       setErrorMsg(msg)
     } finally {
       setSubmitting(false)
@@ -182,16 +182,16 @@ export default function TeamCaptains() {
       {/* Modern Add Captain Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="relative w-full max-w-md bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-zinc-950/20">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-300">
-                {isRTL ? 'إضافة كابتن جديد للأسطول' : 'Add New Fleet Captain'}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)] bg-[var(--color-bg-muted)]/20">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--color-text-main)]">
+                {t('addCaptainTitle')}
               </h2>
               <button
                 onClick={handleClose}
-                className="p-1 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 transition-colors focus:outline-none"
+                className="p-1 rounded-lg text-[var(--dh-text-muted)] hover:text-[var(--color-text-main)] hover:bg-[var(--color-bg-muted)] transition-colors focus:outline-none"
               >
                 <X className="h-4.5 w-4.5" />
               </button>
@@ -206,24 +206,24 @@ export default function TeamCaptains() {
                     <CheckCircle className="h-8 w-8" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-zinc-200">
-                      {isRTL ? 'تم تسجيل الكابتن بنجاح!' : 'Captain Registered Successfully!'}
+                    <h3 className="text-base font-bold text-[var(--color-text-main)]">
+                      {t('captainRegisteredSuccess')}
                     </h3>
-                    <p className="text-xs text-zinc-500 mt-1 max-w-[260px] mx-auto">
-                      {isRTL ? `تمت إضافة ${successCaptain.name} إلى قائمتك بنجاح.` : `Added ${successCaptain.name} to your fleet list.`}
+                    <p className="text-xs text-[var(--color-text-sub)] mt-1 max-w-[260px] mx-auto">
+                      {t('captainAddedToList', { name: successCaptain.name })}
                     </p>
                   </div>
 
                   {tempPassword && (
-                    <div className="w-full bg-zinc-950/60 border border-zinc-850 p-4 rounded-xl flex flex-col gap-1.5 mt-2">
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">
-                        {isRTL ? 'كلمة المرور المؤقتة للحساب' : 'Temporary Account Password'}
+                    <div className="w-full bg-[var(--color-bg-muted)]/60 border border-[var(--color-border)] p-4 rounded-xl flex flex-col gap-1.5 mt-2">
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--dh-text-muted)]">
+                        {t('tempPasswordLabel')}
                       </span>
-                      <span className="text-sm font-mono font-bold text-blue-400 bg-zinc-900 border border-zinc-800 py-2 px-3 rounded-lg select-all">
+                      <span className="text-sm font-mono font-bold text-blue-500 bg-[var(--color-bg-card)] border border-[var(--color-border)] py-2 px-3 rounded-lg select-all">
                         {tempPassword}
                       </span>
-                      <span className="text-[10px] text-zinc-500">
-                        {isRTL ? 'يرجى نسخ وحفظ كلمة المرور هذه للكابتن لتسجيل الدخول.' : 'Please copy and send this password to the captain to login.'}
+                      <span className="text-[10px] text-[var(--dh-text-muted)]">
+                        {t('tempPasswordHint')}
                       </span>
                     </div>
                   )}
@@ -232,7 +232,7 @@ export default function TeamCaptains() {
                     onClick={handleClose}
                     className="w-full mt-4 py-2.5 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-md focus:outline-none"
                   >
-                    {isRTL ? 'إغلاق نافذة التأكيد' : 'Close Confirmation'}
+                    {t('closeConfirmation')}
                   </button>
                 </div>
               ) : (
@@ -246,74 +246,74 @@ export default function TeamCaptains() {
 
                   {/* Full Name */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-zinc-400">
-                      {isRTL ? 'الاسم بالكامل' : 'Full Name'} *
+                    <label className="text-xs font-semibold text-[var(--color-text-sub)]">
+                      {t('fullNameLabel')} *
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                      <User className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dh-text-muted)]" />
                       <input
                         type="text"
                         required
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder={isRTL ? 'مثال: محمد أحمد علي' : 'e.g. John Doe'}
-                        className="w-full bg-zinc-950 border border-zinc-850 rounded-lg pl-9 pr-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-750 transition-colors"
+                        placeholder={t('fullNamePlaceholder')}
+                        className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg ps-9 pe-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors"
                       />
                     </div>
                   </div>
 
                   {/* Email */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-zinc-400">
-                      {isRTL ? 'البريد الإلكتروني' : 'Email Address'} *
+                    <label className="text-xs font-semibold text-[var(--color-text-sub)]">
+                      {t('emailLabel')} *
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                      <Mail className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dh-text-muted)]" />
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="john@example.com"
-                        className="w-full bg-zinc-950 border border-zinc-850 rounded-lg pl-9 pr-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-750 transition-colors"
+                        className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg ps-9 pe-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors"
                       />
                     </div>
                   </div>
 
                   {/* Phone */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-zinc-400">
-                      {isRTL ? 'رقم الهاتف المحمول' : 'Mobile Number'} *
+                    <label className="text-xs font-semibold text-[var(--color-text-sub)]">
+                      {t('phoneLabel')} *
                     </label>
                     <div className="relative">
-                      <PhoneIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                      <PhoneIcon className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dh-text-muted)]" />
                       <input
                         type="tel"
                         required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="e.g. 01012345678"
-                        className="w-full bg-zinc-950 border border-zinc-850 rounded-lg pl-9 pr-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-750 transition-colors"
+                        className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg ps-9 pe-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors"
                       />
                     </div>
                   </div>
 
                   {/* Password */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-zinc-400 flex items-center justify-between">
-                      <span>{isRTL ? 'كلمة المرور' : 'Password'}</span>
-                      <span className="text-[10px] text-zinc-500 font-normal">
-                        ({isRTL ? 'اختياري - سيتم توليدها تلقائياً إن تركت فارغة' : 'Optional - Auto generated if blank'})
+                    <label className="text-xs font-semibold text-[var(--color-text-sub)] flex items-center justify-between">
+                      <span>{t('passwordLabel')}</span>
+                      <span className="text-[10px] text-[var(--dh-text-muted)] font-normal">
+                        ({t('passwordOptionalHint')})
                       </span>
                     </label>
                     <div className="relative">
-                      <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                      <Key className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dh-text-muted)]" />
                       <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder={isRTL ? 'أدخل كلمة مرور (حد أدنى 8 أحرف)' : 'Minimum 8 characters'}
-                        className="w-full bg-zinc-950 border border-zinc-850 rounded-lg pl-9 pr-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-750 transition-colors"
+                        placeholder={t('passwordPlaceholder')}
+                        className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg ps-9 pe-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors"
                       />
                     </div>
                   </div>
@@ -321,38 +321,38 @@ export default function TeamCaptains() {
                   <div className="grid grid-cols-2 gap-4">
                     {/* Vehicle Type */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-semibold text-zinc-400">
-                        {isRTL ? 'نوع المركبة' : 'Vehicle Type'} *
+                      <label className="text-xs font-semibold text-[var(--color-text-sub)]">
+                        {t('vehicleTypeLabel')} *
                       </label>
                       <div className="relative">
-                        <Truck className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 pointer-events-none" />
+                        <Truck className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dh-text-muted)] pointer-events-none" />
                         <select
                           value={vehicleType}
                           onChange={(e) => setVehicleType(e.target.value as any)}
-                          className="w-full bg-zinc-950 border border-zinc-850 rounded-lg pl-9 pr-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-750 appearance-none transition-colors"
+                          className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg ps-9 pe-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 appearance-none transition-colors"
                         >
-                          <option value="motorcycle">{isRTL ? 'دراجة نارية' : 'Motorcycle'}</option>
-                          <option value="car">{isRTL ? 'سيارة' : 'Car'}</option>
-                          <option value="van">{isRTL ? 'شاحنة مغلقة' : 'Van'}</option>
-                          <option value="truck">{isRTL ? 'نقل كبير' : 'Truck'}</option>
+                          <option value="motorcycle" className="bg-[var(--color-bg-card)] text-[var(--color-text-main)]">{t('vehicleMotorcycle')}</option>
+                          <option value="car" className="bg-[var(--color-bg-card)] text-[var(--color-text-main)]">{t('vehicleCar')}</option>
+                          <option value="van" className="bg-[var(--color-bg-card)] text-[var(--color-text-main)]">{t('vehicleVan')}</option>
+                          <option value="truck" className="bg-[var(--color-bg-card)] text-[var(--color-text-main)]">{t('vehicleTruck')}</option>
                         </select>
                       </div>
                     </div>
 
                     {/* Plate Number */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-semibold text-zinc-400">
-                        {isRTL ? 'رقم اللوحة' : 'Plate Number'} *
+                      <label className="text-xs font-semibold text-[var(--color-text-sub)]">
+                        {t('plateNumberLabel')} *
                       </label>
                       <div className="relative">
-                        <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                        <Hash className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dh-text-muted)]" />
                         <input
                           type="text"
                           required
                           value={plateNumber}
                           onChange={(e) => setPlateNumber(e.target.value)}
-                          placeholder={isRTL ? 'مثال: أ ب ج ١٢٣' : 'e.g. ABC 123'}
-                          className="w-full bg-zinc-950 border border-zinc-850 rounded-lg pl-9 pr-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-750 transition-colors"
+                          placeholder={t('plateNumberPlaceholder')}
+                          className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg ps-9 pe-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors"
                         />
                       </div>
                     </div>
@@ -366,10 +366,10 @@ export default function TeamCaptains() {
                     {submitting ? (
                       <>
                         <div className="h-3.5 w-3.5 rounded-full border-2 border-t-white border-blue-800 animate-spin" />
-                        <span>{isRTL ? 'جاري الإضافة...' : 'Adding Captain...'}</span>
+                        <span>{t('addingCaptain')}</span>
                       </>
                     ) : (
-                      <span>{isRTL ? 'تسجيل الكابتن الجديد' : 'Register New Captain'}</span>
+                      <span>{t('registerCaptainBtn')}</span>
                     )}
                   </button>
                 </form>

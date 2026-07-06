@@ -11,13 +11,13 @@ export default function PendingReviewCard({
   onReviewClick,
 }: PendingReviewCardProps) {
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4.5 flex items-center justify-between shadow-sm hover:border-zinc-700 transition-colors">
+    <div className="bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl p-4.5 flex items-center justify-between shadow-sm hover:border-[var(--dh-brand-light)] transition-colors">
       <div className="flex flex-col gap-1">
-        <span className="text-xs font-bold text-zinc-200">
+        <span className="text-xs font-bold text-[var(--color-text-main)]">
           Shipment {pending.trackingNumber}
         </span>
-        <span className="text-[10px] text-zinc-500 font-medium">
-          Delivered to you • Target: <strong className="text-zinc-400">{pending.revieweeName}</strong> ({pending.revieweeType === "Office" ? "Office" : "Driver"})
+        <span className="text-[10px] text-[var(--color-text-sub)] font-medium">
+          Delivered to you • Target: <strong className="text-[var(--color-text-main)]">{pending.revieweeName}</strong> ({pending.revieweeType === "Office" ? "Office" : "Driver"})
         </span>
       </div>
 

@@ -83,25 +83,25 @@ export default function OffersView({ shipmentId }: OffersViewProps) {
   }
 
   return (
-    <div className="flex flex-col gap-6 text-zinc-100 max-w-5xl mx-auto">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-zinc-800 pb-4">
+    <div className="flex flex-col gap-6 text-[var(--dh-text-main)] max-w-5xl mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[var(--dh-border)] pb-4">
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
             <Link
               href="/dashboard"
-              className="p-1 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900 transition-colors mr-1"
+              className="p-1 rounded-lg text-[var(--dh-text-muted)] hover:text-[var(--dh-text-main)] hover:bg-[var(--dh-bg-muted)] transition-colors mr-1"
             >
               <ArrowLeft className="h-4 w-4" />
             </Link>
-            <h1 className="text-xl font-bold tracking-tight text-zinc-100">
+            <h1 className="text-xl font-bold tracking-tight text-[var(--dh-text-main)]">
               {t("received", { count: offers.length })}
             </h1>
-            <span className="text-zinc-600 font-bold">•</span>
+            <span className="text-[var(--dh-text-dim)] font-bold">•</span>
             <span className="text-sm font-semibold text-blue-500">
               {shipment.trackingNumber}
             </span>
           </div>
-          <p className="text-xs text-zinc-500 ml-8 font-medium">
+          <p className="text-xs text-[var(--dh-text-sub)] ml-8 font-medium">
             {shipment.pickupAddress ? shipment.pickupAddress.split(",")[0] : ""} ➔ {shipment.deliveryAddress ? shipment.deliveryAddress.split(",")[0] : ""} • {shipment.weight}kg • {getSpeedLabel(shipment.deliverySpeed)}
           </p>
         </div>
@@ -117,11 +117,11 @@ export default function OffersView({ shipmentId }: OffersViewProps) {
       </div>
 
       <div className="flex justify-end gap-2.5">
-        <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-zinc-900 border border-zinc-800 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all focus:outline-none">
+        <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--dh-bg-card)] border border-[var(--dh-border)] text-[var(--dh-text-sub)] hover:border-[var(--dh-text-muted)] hover:bg-[var(--dh-bg-muted)] transition-all focus:outline-none">
           <SlidersHorizontal className="h-3.5 w-3.5" />
           <span>{t("filter")}</span>
         </button>
-        <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-zinc-900 border border-zinc-800 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-900/80 transition-all focus:outline-none">
+        <button className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--dh-bg-card)] border border-[var(--dh-border)] text-[var(--dh-text-sub)] hover:border-[var(--dh-text-muted)] hover:bg-[var(--dh-bg-muted)] transition-all focus:outline-none">
           <ArrowUpDown className="h-3.5 w-3.5" />
           <span>{t("sortPrice")}</span>
         </button>

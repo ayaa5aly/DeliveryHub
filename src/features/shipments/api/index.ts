@@ -35,6 +35,8 @@ export function mapShipment(s: any): Shipment {
       name: s.captain.fullName || s.captain.name || "",
       phone: s.captain.phone || "",
       avatar: s.captain.profileImage || s.captain.avatar || undefined,
+      rating: s.captain.rating || undefined,
+      reviewsCount: s.captain.reviewsCount || undefined,
     } : undefined,
   };
 }

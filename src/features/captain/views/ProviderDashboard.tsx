@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
+import { useCaptainTranslations } from '@/features/captain/hooks/use-captain-translations'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { fetchCaptainDashboard, switchAccountTypeData } from '@/features/captain/store/data-slice'
 import { useNotifications } from '@/shared/providers/socket-notification-provider'
@@ -61,6 +62,7 @@ export default function ProviderDashboard() {
   const router       = useRouter()
   const activeScreen = useAppSelector(selectActiveScreen)
   const dataStatus   = useAppSelector(selectCaptainDataStatus)
+  const t            = useCaptainTranslations()
   const locale       = useLocale()
   const isRTL        = locale === 'ar'
 
@@ -125,7 +127,7 @@ export default function ProviderDashboard() {
       <div className="flex items-center justify-center min-h-screen bg-[var(--dh-bg-app)] text-[var(--dh-text-sub)] text-sm font-semibold">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 rounded-full border-2 border-t-[var(--dh-brand)] border-[var(--dh-border)] animate-spin" />
-          <span>{locale === 'ar' ? 'جاري التحقق من الصلاحيات...' : 'Verifying permissions...'}</span>
+          <span>{t('verifyingPermissions')}</span>
         </div>
       </div>
     )

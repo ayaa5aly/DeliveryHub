@@ -36,7 +36,7 @@ export async function submitOffer(
       shipmentId: payload.requestId,
       price: payload.quoteEGP,
       estimatedDelivery: payload.estimatedDelivery || "2 hours",
-      coverage: "None",
+      coverage: payload.coverage || "None",
       description: payload.description || "Custom offer from driver dashboard",
     },
   );

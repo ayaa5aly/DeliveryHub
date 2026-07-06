@@ -83,13 +83,13 @@ export default function Offers() {
       </div>
 
       {/* Premium Filter and Search Panel */}
-      <div className="flex flex-col sm:flex-row gap-3 p-4 bg-zinc-900/60 backdrop-blur-md border border-zinc-800/80 rounded-xl shadow-lg">
+      <div className="flex flex-col sm:flex-row gap-3 p-4 bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl shadow-sm">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="absolute top-2.5 left-3 rtl:left-auto rtl:right-3 h-4 w-4 text-zinc-500" />
+          <Search className="absolute top-2.5 left-3 rtl:left-auto rtl:right-3 h-4 w-4 text-[var(--dh-text-muted)]" />
           <input
             type="text"
-            className="w-full bg-zinc-950/80 border border-zinc-800 rounded-lg pl-9 pr-4 rtl:pl-4 rtl:pr-9 py-2 text-zinc-200 placeholder-zinc-500 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+            className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg pl-9 pr-4 rtl:pl-4 rtl:pr-9 py-2 text-[var(--color-text-main)] placeholder-[var(--dh-text-muted)] text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             placeholder={t('search_shipment')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -98,9 +98,9 @@ export default function Offers() {
 
         {/* Status Filter */}
         <div className="relative min-w-[180px]">
-          <Filter className="absolute top-2.5 left-3 rtl:left-auto rtl:right-3 h-4 w-4 text-zinc-500 pointer-events-none" />
+          <Filter className="absolute top-2.5 left-3 rtl:left-auto rtl:right-3 h-4 w-4 text-[var(--dh-text-muted)] pointer-events-none" />
           <select
-            className="w-full bg-zinc-950/80 border border-zinc-800 rounded-lg pl-9 pr-4 rtl:pl-4 rtl:pr-9 py-2 text-zinc-200 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all appearance-none cursor-pointer"
+            className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg pl-9 pr-4 rtl:pl-4 rtl:pr-9 py-2 text-[var(--color-text-main)] text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all appearance-none cursor-pointer"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >

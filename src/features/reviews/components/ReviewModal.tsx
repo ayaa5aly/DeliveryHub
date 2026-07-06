@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -32,7 +33,7 @@ export default function ReviewModal({
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { triggerLocalToast } = useNotifications();
-  const t = useTranslations("customer");
+  const t = useTranslations();
 
   if (!isOpen) return null;
 
@@ -49,8 +50,8 @@ export default function ReviewModal({
         comment: comment.trim(),
       });
       triggerLocalToast(
-        t("reviews.reviewSubmittedTitle"),
-        t("reviews.reviewSubmittedMessage"),
+        t("customer.reviews.reviewSubmittedTitle"),
+        t("customer.reviews.reviewSubmittedMessage"),
         "success"
       );
       onSubmitSuccess();
@@ -58,8 +59,8 @@ export default function ReviewModal({
     } catch (err: any) {
       console.error(err);
       triggerLocalToast(
-        t("reviews.reviewFailedTitle"),
-        err.response?.data?.message || t("reviews.reviewFailedMessage"),
+        t("customer.reviews.reviewFailedTitle"),
+        err.response?.data?.message || t("customer.reviews.reviewFailedMessage"),
         "error"
       );
     } finally {
@@ -69,15 +70,15 @@ export default function ReviewModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl max-w-md w-full shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div className="bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl max-w-md w-full shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-850 px-5 py-4">
-          <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">
-            {t("reviews.modalTitle")} #{trackingNumber}
+        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-5 py-4">
+          <h3 className="text-sm font-bold text-[var(--color-text-main)] uppercase tracking-wider">
+            {t("customer.reviews.modalTitle")} #{trackingNumber}
           </h3>
           <button
             onClick={onClose}
-            className="text-zinc-400 hover:text-zinc-200 transition-colors"
+            className="text-[var(--color-text-sub)] hover:text-[var(--color-text-main)] transition-colors"
           >
             <X size={18} />
           </button>
@@ -86,17 +87,17 @@ export default function ReviewModal({
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-5 flex flex-col gap-4">
           <div>
-            <label className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block mb-1">
-              {t("reviews.reviewing")} {revieweeType === "Office" ? t("reviews.office") : t("reviews.driver")}
+            <label className="text-[10px] text-[var(--dh-text-muted)] font-bold uppercase tracking-wider block mb-1">
+              {t("customer.reviews.reviewing")} {revieweeType === "Office" ? t("customer.reviews.office") : t("customer.reviews.driver")}
             </label>
-            <div className="text-sm font-semibold text-zinc-200 bg-zinc-850 border border-zinc-800 rounded-lg px-3 py-2">
+            <div className="text-sm font-semibold text-[var(--color-text-main)] bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg px-3 py-2">
               {revieweeName}
             </div>
           </div>
 
           <div>
-            <label className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block mb-2">
-              {t("reviews.yourRating")}
+            <label className="text-[10px] text-[var(--dh-text-muted)] font-bold uppercase tracking-wider block mb-2">
+              {t("customer.reviews.yourRating")}
             </label>
             <RatingStars
               rating={rating}
@@ -107,25 +108,25 @@ export default function ReviewModal({
           </div>
 
           <div>
-            <label className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block mb-1.5">
-              {t("reviews.commentLabel")}
+            <label className="text-[10px] text-[var(--dh-text-muted)] font-bold uppercase tracking-wider block mb-1.5">
+              {t("customer.reviews.commentLabel")}
             </label>
             <textarea
               rows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder={t("reviews.commentPlaceholder")}
+              placeholder={t("customer.reviews.commentPlaceholder")}
               maxLength={500}
-              className="w-full text-xs bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-700 transition-colors resize-none"
+              className="w-full text-xs bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg p-3 text-[var(--color-text-main)] placeholder-[var(--dh-text-muted)] focus:outline-none focus:border-blue-500 transition-colors resize-none"
             />
           </div>
 
           {/* Footer Actions */}
-          <div className="flex gap-3 justify-end mt-2 pt-2 border-t border-zinc-850">
+          <div className="flex gap-3 justify-end mt-2 pt-2 border-t border-[var(--color-border)]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-zinc-200 transition-colors focus:outline-none"
+              className="px-4 py-2 text-xs font-semibold text-[var(--color-text-sub)] hover:text-[var(--color-text-main)] transition-colors focus:outline-none"
             >
               {t("common.cancel")}
             </button>
@@ -134,7 +135,7 @@ export default function ReviewModal({
               disabled={isSubmitting}
               className="px-5 py-2 text-xs font-semibold rounded-lg bg-amber-500 hover:bg-amber-600 text-zinc-950 disabled:opacity-50 transition-all focus:outline-none shadow-sm"
             >
-              {isSubmitting ? t("reviews.submitting") : t("reviews.submit")}
+              {isSubmitting ? t("customer.reviews.submitting") : t("customer.reviews.submit")}
             </button>
           </div>
         </form>

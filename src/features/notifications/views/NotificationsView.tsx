@@ -309,43 +309,50 @@ export default function NotificationsView() {
       case "pickup":
         return {
           icon: Truck,
-          borderColor: "border-l-4 border-l-blue-600",
-          iconColor: "text-blue-600 bg-blue-50 border-blue-100",
+          borderColor: "border-s-4 border-s-blue-500",
+          iconColor: "text-blue-500 bg-blue-500/10 border-blue-500/20 dark:bg-blue-500/10 dark:border-blue-500/20",
+          glowColor: "rgba(59, 130, 246, 0.05)",
         };
       case "offer":
         return {
           icon: Check,
-          borderColor: "border-l-4 border-l-emerald-600",
-          iconColor: "text-emerald-600 bg-emerald-50 border-emerald-100",
+          borderColor: "border-s-4 border-s-emerald-500",
+          iconColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20 dark:bg-emerald-500/10 dark:border-emerald-500/20",
+          glowColor: "rgba(16, 185, 129, 0.05)",
         };
       case "received":
         return {
           icon: Wallet,
-          borderColor: "border-l-4 border-l-[var(--dh-accent)]",
-          iconColor: "text-[var(--dh-accent)] bg-orange-50 border-orange-100",
+          borderColor: "border-s-4 border-s-amber-500",
+          iconColor: "text-amber-500 bg-amber-500/10 border-amber-500/20 dark:bg-amber-500/10 dark:border-amber-500/20",
+          glowColor: "rgba(245, 158, 11, 0.05)",
         };
       case "delivered":
         return {
           icon: CheckCircle,
-          borderColor: "border-l-4 border-l-slate-400",
-          iconColor: "text-slate-600 bg-slate-50 border-slate-200",
+          borderColor: "border-s-4 border-s-emerald-600",
+          iconColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20 dark:bg-emerald-500/10 dark:border-emerald-500/20",
+          glowColor: "rgba(16, 185, 129, 0.05)",
         };
       default:
         return {
           icon: Info,
-          borderColor: "border-l-4 border-l-slate-400",
-          iconColor: "text-slate-500 bg-slate-50 border-slate-200",
+          borderColor: "border-s-4 border-s-zinc-500",
+          iconColor: "text-zinc-400 bg-zinc-500/10 border-zinc-500/20 dark:bg-zinc-500/10 dark:border-zinc-500/20",
+          glowColor: "rgba(113, 113, 122, 0.05)",
         };
     }
   };
 
+  const isRTL = locale === 'ar';
+
   return (
-    <div className="flex flex-col gap-6 text-[var(--dh-text-main)] max-w-2xl mx-auto">
-      <div className="flex items-center justify-between border-b border-[var(--dh-border)] pb-4">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-bold tracking-tight">{t("title")}</h1>
+    <div className={cn("flex flex-col gap-6 text-[var(--dh-text-main)] max-w-2xl mx-auto", isRTL && "text-right")}>
+      <div className={cn("flex items-center justify-between border-b border-[var(--dh-border)] pb-4", isRTL && "flex-row-reverse")}>
+        <div className={cn("flex items-center gap-3", isRTL && "flex-row-reverse")}>
+          <h1 className="text-lg font-extrabold tracking-tight">{t("title")}</h1>
           {unreadCount > 0 && (
-            <span className="bg-[var(--dh-danger)]/10 border border-[var(--dh-danger)]/20 text-[var(--dh-danger)] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
+            <span className="bg-red-500/10 border border-red-500/20 text-red-400 px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-[0_2px_8px_rgba(239,68,68,0.1)] animate-pulse">
               {t("newCount", { count: unreadCount })}
             </span>
           )}
@@ -353,7 +360,7 @@ export default function NotificationsView() {
         {unreadCount > 0 && (
           <button
             onClick={handleMarkAllRead}
-            className="text-xs font-semibold text-[var(--dh-brand)] hover:text-[var(--dh-brand-light)] focus:outline-none transition-colors"
+            className="text-xs font-bold text-[var(--dh-brand)] hover:text-[var(--dh-brand-light)] focus:outline-none transition-colors duration-200 hover:underline"
           >
             {t("markAll")}
           </button>
@@ -361,11 +368,11 @@ export default function NotificationsView() {
       </div>
 
       {isLoading && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="bg-[var(--dh-bg-card)] border border-[var(--dh-border)] rounded-xl p-4 h-[72px] animate-pulse"
+              className="bg-[var(--dh-bg-card)]/50 border border-[var(--dh-border)] rounded-xl p-5 h-[90px] animate-pulse"
             />
           ))}
         </div>
@@ -376,84 +383,118 @@ export default function NotificationsView() {
       )}
 
       {!isLoading && !error && notifications.length === 0 && (
-        <p className="text-sm text-[var(--dh-text-muted)] text-center py-8">
-          لا توجد إشعارات حاليًا
-        </p>
+        <div className="flex flex-col items-center justify-center py-16 gap-3 text-center">
+          <div className="p-4 bg-[var(--dh-bg-muted)]/30 rounded-2xl border border-[var(--dh-border)]/40 text-[var(--dh-text-muted)]">
+            <CheckCircle className="h-8 w-8 opacity-40" />
+          </div>
+          <p className="text-xs text-[var(--dh-text-sub)] max-w-xs leading-relaxed font-semibold">
+            {t("empty")}
+          </p>
+        </div>
       )}
 
       {!isLoading && !error && notifications.length > 0 && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           {notifications.map((item) => {
             const config = getTypeConfig(item.type);
             const Icon = config.icon;
             const { title, message } = getTranslatedContent(item);
 
+            const glowStyle = item.isRead
+              ? {}
+              : {
+                  background: `linear-gradient(to ${isRTL ? 'left' : 'right'}, ${config.glowColor}, transparent)`,
+                };
+
             return (
               <div
                 key={item.id}
                 onClick={() => handleMarkRead(item.id)}
+                style={glowStyle}
                 className={cn(
-                  "bg-[var(--dh-bg-card)] border border-[var(--dh-border)] border-l-0 rounded-r-xl p-4 flex gap-4 items-start shadow-sm transition-all cursor-pointer",
+                  "group relative bg-[var(--dh-bg-card)]/60 backdrop-blur-md border border-[var(--dh-border)] rounded-e-2xl rounded-s-md p-5 flex gap-4 items-start shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md cursor-pointer",
                   config.borderColor,
+                  isRTL && "flex-row-reverse",
                   item.isRead
-                    ? "opacity-65 hover:bg-[var(--dh-bg-muted)]/50"
-                    : "hover:bg-[var(--dh-bg-muted)]/20 hover:border-[var(--dh-border)]",
+                    ? "opacity-60 hover:bg-[var(--dh-bg-muted)]/40"
+                    : "hover:bg-[var(--dh-bg-muted)]/10"
                 )}
               >
+                {/* Icon Squircle Wrapper */}
                 <div
                   className={cn(
-                    "p-2.5 rounded-lg border shrink-0",
-                    config.iconColor,
+                    "p-3 rounded-2xl border shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-[var(--dh-shadow-sm)]",
+                    config.iconColor
                   )}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-4.5 w-4.5" />
                 </div>
-                <div className="flex flex-col gap-0.5 flex-1">
-                  <div className="flex justify-between items-baseline gap-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-[var(--dh-text-main)]">
+
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <div className={cn("flex justify-between items-baseline gap-4", isRTL && "flex-row-reverse")}>
+                    <div className={cn("flex items-center gap-2", isRTL && "flex-row-reverse")}>
+                      <span className="text-xs font-extrabold text-[var(--dh-text-main)] group-hover:text-[var(--dh-brand-light)] transition-colors">
                         {title}
                       </span>
                       {!item.isRead && (
-                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--dh-brand)] animate-pulse" />
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--dh-brand)] opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--dh-brand)]"></span>
+                        </span>
                       )}
                     </div>
-                    <span className="text-[10px] text-[var(--dh-text-dim)] shrink-0 font-medium">
+                    <span className="text-[10px] text-[var(--dh-text-dim)] shrink-0 font-bold tracking-tight">
                       {item.time}
                     </span>
                   </div>
-                  <p className="text-xs text-[var(--dh-text-sub)] mt-1 leading-relaxed">
+
+                  <p className="text-xs text-[var(--dh-text-sub)] mt-1.5 leading-relaxed font-semibold">
                     {message}
                   </p>
 
                   {item.type !== "received" && (item.captainName || item.shipmentDate) && (
-                    <div className="mt-2.5 pt-2 border-t border-[var(--dh-border)]/60 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[var(--dh-text-sub)] font-medium">
+                    <div className={cn(
+                      "mt-4 pt-3 border-t border-[var(--dh-border)]/50 flex flex-wrap gap-x-4 gap-y-2 text-[10px] text-[var(--dh-text-sub)]",
+                      isRTL && "flex-row-reverse"
+                    )}>
                       {item.captainName && (
-                        <div>
-                          <span className="text-[var(--dh-text-muted)]">{locale === 'ar' ? 'الكابتن:' : 'Captain:'}</span>{' '}
-                          <span className="text-[var(--dh-brand)] font-bold">{item.captainName}</span>
+                        <div className={cn(
+                          "flex items-center gap-1.5 bg-[var(--dh-bg-muted)]/50 px-2.5 py-1 rounded-lg border border-[var(--dh-border)]/30",
+                          isRTL && "flex-row-reverse"
+                        )}>
+                          <span className="text-[var(--dh-text-muted)] font-bold">{locale === 'ar' ? 'الكابتن:' : 'Captain:'}</span>
+                          <span className="text-[var(--dh-brand-light)] font-extrabold">{item.captainName}</span>
                         </div>
                       )}
                       {item.shipmentDate && (
-                        <div>
-                          <span className="text-[var(--dh-text-muted)]">{locale === 'ar' ? 'تاريخ الشحن:' : 'Date:'}</span>{' '}
-                          <span className="text-[var(--dh-text-main)] font-bold">{item.shipmentDate}</span>
+                        <div className={cn(
+                          "flex items-center gap-1.5 bg-[var(--dh-bg-muted)]/50 px-2.5 py-1 rounded-lg border border-[var(--dh-border)]/30",
+                          isRTL && "flex-row-reverse"
+                        )}>
+                          <span className="text-[var(--dh-text-muted)] font-bold">{locale === 'ar' ? 'تاريخ الشحن:' : 'Date:'}</span>
+                          <span className="text-[var(--dh-text-main)] font-extrabold">{item.shipmentDate}</span>
                         </div>
                       )}
                     </div>
                   )}
 
                   {item.shipmentId && (
-                    <div className="mt-3 flex items-center">
+                    <div className={cn("mt-4 flex items-center", isRTL && "justify-end")}>
                       <Link
                         href={item.type === "received" ? `/offers/${item.shipmentId}` : `/tracking/${item.shipmentId}`}
                         onClick={(e) => handleViewDetails(item, e)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--dh-bg-muted)] text-[var(--dh-brand)] hover:bg-[var(--dh-border)] hover:text-[var(--dh-brand-light)] transition-all border border-[var(--dh-border)]"
+                        className={cn(
+                          "group/btn flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-extrabold bg-[var(--dh-bg-muted)]/80 text-[var(--dh-brand)] hover:bg-[var(--dh-brand)] hover:text-white transition-all duration-200 border border-[var(--dh-border)] hover:border-transparent shadow-sm hover:shadow-[0_4px_12px_rgba(59,130,246,0.15)]",
+                          isRTL && "flex-row-reverse"
+                        )}
                       >
                         <span>
                           {item.type === "received"
-                            ? `${t("viewOffers")} ←`
-                            : `${t("viewDetails")} ←`}
+                            ? t("viewOffers")
+                            : t("viewDetails")}
+                        </span>
+                        <span className="transition-transform group-hover/btn:translate-x-0.5 rtl:group-hover/btn:-translate-x-0.5 font-bold">
+                          {locale === 'ar' ? '←' : '→'}
                         </span>
                       </Link>
                     </div>

@@ -41,6 +41,7 @@ export default function LoginView() {
           ]),
         );
         setErrors(fieldErrors);
+        setIsLoading(false);
         return;
       }
       console.log("Login data:", { email, password, rememberMe });

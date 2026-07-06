@@ -203,7 +203,7 @@ export default function Topbar() {
             </div>
             <div className="hidden sm:flex flex-col items-start text-start">
               <span className="text-sm font-semibold leading-tight text-[var(--dh-text-main)]">
-                {user ? user.name : "Loading..."}
+                {user ? user.name : t("loadingUser")}
               </span>
               <span className="text-[10px] text-[var(--dh-text-muted)]">
                 {user ? getLocalizedRole(user.role) : "..."}
@@ -232,7 +232,7 @@ export default function Topbar() {
                   className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[var(--dh-text-sub)] hover:bg-[var(--dh-bg-muted)] hover:text-[var(--dh-text-main)] transition-colors text-start"
                 >
                   <UserIcon className="h-4 w-4 text-[var(--dh-text-muted)]" />
-                  <span>{locale === 'ar' ? 'ملفي الشخصي' : 'My Profile'}</span>
+                  <span>{t("myProfileLink")}</span>
                 </button>
                 <button
                   onClick={() => {
@@ -242,7 +242,7 @@ export default function Topbar() {
                   className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[var(--dh-text-sub)] hover:bg-[var(--dh-bg-muted)] hover:text-[var(--dh-text-main)] transition-colors text-start"
                 >
                   <Settings className="h-4 w-4 text-[var(--dh-text-muted)]" />
-                  <span>{locale === 'ar' ? 'إعدادات الحساب' : 'Account Settings'}</span>
+                  <span>{t("accountSettingsLink")}</span>
                 </button>
                 <hr className="border-[var(--dh-border)] my-1" />
                 <button
@@ -258,7 +258,7 @@ export default function Topbar() {
                   className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[var(--dh-danger)] hover:bg-[var(--dh-danger-subtle)] hover:text-[var(--dh-danger)] transition-colors text-start"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span>{locale === 'ar' ? 'تسجيل الخروج' : 'Sign Out'}</span>
+                  <span>{t("signOutLink")}</span>
                 </button>
               </div>
             </>

@@ -212,7 +212,7 @@ export default function Sidebar() {
 
         {/* Footer / Copyright or secondary info */}
         <div className="px-3 text-[11px] text-[var(--dh-text-dim)] mt-4 border-t border-[var(--dh-border)] pt-3 text-center">
-          <p>© 2026 طيار</p>
+          <p>{t('copyrightLabel')}</p>
         </div>
       </aside>
     </>

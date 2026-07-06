@@ -29,12 +29,12 @@ export default function GlobalLiveChat() {
 
   const t = {
     title: isRTL ? "محادثة الدعم المباشر" : "Live Support Chat",
-    agentName: isRTL ? "خدمة عملاء ديليكس" : "Delix Support Agent",
+    agentName: isRTL ? "خدمة عملاء طيار" : "Tayar Support Agent",
     agentStatus: isRTL ? "نشط الآن" : "Active now",
     placeholder: isRTL ? "اكتب رسالة هنا..." : "Type a message...",
     welcome: isRTL 
-      ? "مرحبًا بك في دعم Delix المباشر! كيف يمكننا مساعدتك اليوم؟" 
-      : "Hello! Welcome to Delix Live Support. How can we help you today?",
+      ? "مرحبًا بك في دعم طيار المباشر! كيف يمكننا مساعدتك اليوم؟" 
+      : "Hello! Welcome to Tayar Live Support. How can we help you today?",
     hotlinePrompt: isRTL
       ? "للحصول على دعم سريع، يمكنك أيضًا الاتصال بخطنا الساخن: 01063732212"
       : "For urgent inquiries, you can also reach our hotline: 01063732212",

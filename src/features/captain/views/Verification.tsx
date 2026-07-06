@@ -39,7 +39,7 @@ export default function Verification() {
       getCurrentUser(),
       getVerificationStatus().catch(() => ({
         isVerified: false,
-        complianceText: locale === 'ar' ? 'يرجى رفع المستندات لبدء توثيق حسابك.' : 'Please upload documents to verify your account.',
+        complianceText: t('uploadDocsNotice'),
       })),
     ])
       .then(([user, verStatus]) => {
@@ -57,11 +57,11 @@ export default function Verification() {
 
   const documentOptions = userRole === 'office'
     ? [
-        { value: 'commercial_license', label: locale === 'ar' ? 'السجل التجاري (رخصة المكتب)' : 'Commercial Register (Office License)' },
+        { value: 'commercial_license', label: t('commercialLicenseLabel') },
       ]
     : [
-        { value: 'national_id', label: locale === 'ar' ? 'الهوية الوطنية / الإقامة' : 'National ID / Iqama' },
-        { value: 'driving_license', label: locale === 'ar' ? 'رخصة القيادة' : 'Driving License' },
+        { value: 'national_id', label: t('nationalIdLabel') },
+        { value: 'driving_license', label: t('drivingLicenseLabel') },
       ]
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,11 +75,11 @@ export default function Verification() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!docNumber.trim()) {
-      setErrorMsg(locale === 'ar' ? 'الرجاء إدخال رقم المستند' : 'Please enter the document number')
+      setErrorMsg(t('enterDocNumber'))
       return
     }
     if (!fileSelected) {
-      setErrorMsg(locale === 'ar' ? 'الرجاء اختيار ملف أولاً' : 'Please select a file first')
+      setErrorMsg(t('selectFileFirst'))
       return
     }
 
@@ -99,44 +99,44 @@ export default function Verification() {
         })
 
         setStatusData(result)
-        setSuccessMsg(locale === 'ar' ? 'تم تقديم مستند التوثيق بنجاح!' : 'Verification document submitted successfully!')
+        setSuccessMsg(t('docSubmitSuccess'))
         setDocNumber('')
         setFileSelected(null)
         setFilePreview(null)
       } catch (err: any) {
         console.error('Failed to submit verification:', err)
-        setErrorMsg(locale === 'ar' ? 'فشل إرسال طلب التوثيق. يرجى المحاولة لاحقاً.' : 'Failed to submit verification request. Please try again.')
+        setErrorMsg(t('docSubmitError'))
       } finally {
         setSubmitting(false)
       }
     }
     reader.onerror = () => {
-      setErrorMsg(locale === 'ar' ? 'فشل قراءة الملف.' : 'Failed to read the file.')
+      setErrorMsg(t('fileReadError'))
       setSubmitting(false)
     }
   }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[300px] text-zinc-400 text-sm font-semibold">
-        <div className="h-6 w-6 rounded-full border-2 border-t-blue-500 border-zinc-800 animate-spin mr-2" />
-        <span>{locale === 'ar' ? 'جاري تحميل حالة التوثيق...' : 'Loading verification status...'}</span>
+      <div className="flex items-center justify-center min-h-[300px] text-[var(--color-text-sub)] text-sm font-semibold">
+        <div className="h-6 w-6 rounded-full border-2 border-t-blue-500 border-[var(--color-border)] animate-spin mr-2" />
+        <span>{t('loadingVerificationStatus')}</span>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-6 text-zinc-100 max-w-2xl mx-auto">
+    <div className="flex flex-col gap-6 text-[var(--color-text-main)] max-w-2xl mx-auto">
       {/* View Header */}
       <div className={clsx(isRTL && "text-right")}>
         <h1 className="text-xl font-bold tracking-tight">{t('verification_title')}</h1>
-        <p className="text-xs text-zinc-500 mt-1">{t('verification_sub')}</p>
+        <p className="text-xs text-[var(--color-text-sub)] mt-1">{t('verification_sub')}</p>
       </div>
 
       {/* Verification Status Card */}
       <div
         className={clsx(
-          "bg-zinc-900 border border-zinc-800 rounded-xl p-5 shadow-sm flex items-start gap-4",
+          "bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl p-5 shadow-sm flex items-start gap-4",
           isRTL && "flex-row-reverse text-right"
         )}
       >
@@ -147,12 +147,12 @@ export default function Verification() {
           <ShieldCheck className="h-6 w-6" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-bold text-zinc-200">
+          <h3 className="text-sm font-bold text-[var(--color-text-main)]">
             {statusData.isVerified
-              ? (locale === 'ar' ? 'حساب موثق بالكامل' : 'Fully Verified Account')
-              : (locale === 'ar' ? 'في انتظار التوثيق' : 'Pending Verification')}
+              ? t('fullyVerifiedAccount')
+              : t('pendingVerification')}
           </h3>
-          <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+          <p className="text-xs text-[var(--dh-text-muted)] mt-1.5 leading-relaxed">
             {statusData.complianceText}
           </p>
         </div>
@@ -175,27 +175,27 @@ export default function Verification() {
 
       {/* Document Upload Form */}
       {!statusData.isVerified && (
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-sm flex flex-col gap-5">
-          <h2 className={clsx("text-xs font-bold uppercase tracking-wider text-zinc-400", isRTL && "text-right")}>
-            {locale === 'ar' ? 'رفع أوراق ومستندات جديدة' : 'Upload New Documents'}
+        <div className="bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl p-6 shadow-sm flex flex-col gap-5">
+          <h2 className={clsx("text-xs font-bold uppercase tracking-wider text-[var(--color-text-sub)]", isRTL && "text-right")}>
+            {t('uploadNewDocsTitle')}
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {/* Document Type Dropdown */}
             <div className={clsx("flex flex-col gap-1.5", isRTL && "items-end")}>
-              <label className="text-xs font-semibold text-zinc-400">
-                {locale === 'ar' ? 'نوع المستند' : 'Document Type'}
+              <label className="text-xs font-semibold text-[var(--color-text-sub)]">
+                {t('docTypeLabel')}
               </label>
               <select
                 value={docType}
                 onChange={(e) => setDocType(e.target.value)}
                 className={clsx(
-                  "w-full bg-zinc-950 border border-zinc-850 rounded-lg px-4 py-2.5 text-xs text-zinc-200 focus:outline-none transition-colors",
+                  "w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg px-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors",
                   isRTL && "text-right"
                 )}
               >
                 {documentOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value} className="bg-zinc-950">
+                  <option key={opt.value} value={opt.value} className="bg-[var(--color-bg-card)] text-[var(--color-text-main)]">
                     {opt.label}
                   </option>
                 ))}
@@ -204,16 +204,16 @@ export default function Verification() {
 
             {/* Document Number Input */}
             <div className={clsx("flex flex-col gap-1.5", isRTL && "items-end")}>
-              <label className="text-xs font-semibold text-zinc-400">
-                {locale === 'ar' ? 'رقم المستند / الرخصة' : 'Document / License Number'}
+              <label className="text-xs font-semibold text-[var(--color-text-sub)]">
+                {t('docLicenseNumberLabel')}
               </label>
               <input
                 type="text"
                 value={docNumber}
                 onChange={(e) => setDocNumber(e.target.value)}
-                placeholder={locale === 'ar' ? 'أدخل رقم المستند هنا...' : 'Enter document number here...'}
+                placeholder={t('enterDocNumberPlaceholder')}
                 className={clsx(
-                  "w-full bg-zinc-950 border border-zinc-850 rounded-lg px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-700 transition-colors",
+                  "w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg px-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors",
                   isRTL && "text-right"
                 )}
               />
@@ -221,11 +221,11 @@ export default function Verification() {
 
             {/* Custom File Upload Area */}
             <div className={clsx("flex flex-col gap-1.5", isRTL && "items-end")}>
-              <label className="text-xs font-semibold text-zinc-400">
-                {locale === 'ar' ? 'ملف المستند (صورة)' : 'Document File (Image)'}
+              <label className="text-xs font-semibold text-[var(--color-text-sub)]">
+                {t('docFileLabel')}
               </label>
 
-              <label className="w-full min-h-[140px] border-2 border-dashed border-zinc-800 hover:border-zinc-700 bg-zinc-950 rounded-xl flex flex-col items-center justify-center gap-3 p-4 cursor-pointer transition-colors relative overflow-hidden group">
+              <label className="w-full min-h-[140px] border-2 border-dashed border-[var(--color-border)] hover:border-blue-500 bg-[var(--color-bg-muted)] rounded-xl flex flex-col items-center justify-center gap-3 p-4 cursor-pointer transition-colors relative overflow-hidden group">
                 <input
                   type="file"
                   accept="image/*"
@@ -236,7 +236,7 @@ export default function Verification() {
                 {filePreview ? (
                   <div className="absolute inset-0 bg-black/60 flex items-center justify-center gap-2 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <Upload className="h-4 w-4" />
-                    <span>{locale === 'ar' ? 'تغيير الصورة' : 'Change Image'}</span>
+                    <span>{t('changeImageBtn')}</span>
                   </div>
                 ) : null}
 
@@ -248,15 +248,15 @@ export default function Verification() {
                   />
                 ) : (
                   <>
-                    <div className="p-3 bg-zinc-900 border border-zinc-850 text-zinc-400 rounded-lg group-hover:scale-105 transition-transform duration-200">
+                    <div className="p-3 bg-[var(--color-bg-card)] border border-[var(--color-border)] text-[var(--dh-text-muted)] rounded-lg group-hover:scale-105 transition-transform duration-200">
                       <FileText className="h-5 w-5" />
                     </div>
                     <div className="text-center">
-                      <span className="text-xs font-semibold text-zinc-300 block">
-                        {locale === 'ar' ? 'اضغط لرفع صورة المستند' : 'Click to upload document image'}
+                      <span className="text-xs font-semibold text-[var(--color-text-main)] block">
+                        {t('clickToUploadDoc')}
                       </span>
-                      <span className="text-[10px] text-zinc-500 mt-1 block">
-                        Supports PNG, JPG, JPEG (Max 5MB)
+                      <span className="text-[10px] text-[var(--dh-text-muted)] mt-1 block font-medium">
+                        {t('fileSupportHint')}
                       </span>
                     </div>
                   </>
@@ -271,8 +271,8 @@ export default function Verification() {
               className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/50 text-white font-semibold text-xs py-2.5 rounded-lg transition-colors mt-2"
             >
               {submitting
-                ? (locale === 'ar' ? 'جاري الإرسال...' : 'Submitting...')
-                : (locale === 'ar' ? 'تقديم المستند للمراجعة' : 'Submit Document for Review')}
+                ? t('submittingBtn')
+                : t('submitDocBtn')}
             </button>
           </form>
         </div>

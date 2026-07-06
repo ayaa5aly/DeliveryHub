@@ -25,13 +25,13 @@ export default function ShipmentCard({ shipment }: ShipmentCardProps) {
   } = shipment;
 
   const statusStyles: Record<ShipmentStatus, string> = {
-    in_transit: "bg-blue-50 text-blue-700 border-blue-100",
-    captain_assignment: "bg-amber-50 text-amber-700 border-amber-100",
-    delivered: "bg-green-50 text-green-700 border-green-100",
-    pending_offers: "bg-slate-50 text-slate-700 border-slate-100",
-    picked_up: "bg-blue-50 text-blue-700 border-blue-100",
-    out_for_delivery: "bg-blue-50 text-blue-700 border-blue-100",
-    cancelled: "bg-red-50 text-red-700 border-red-100",
+    in_transit: "bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-900/30",
+    captain_assignment: "bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900/30",
+    delivered: "bg-green-50 text-green-700 border-green-100 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900/30",
+    pending_offers: "bg-slate-50 text-slate-700 border-slate-100 dark:bg-zinc-800/40 dark:text-zinc-400 dark:border-zinc-700/30",
+    picked_up: "bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-900/30",
+    out_for_delivery: "bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-900/30",
+    cancelled: "bg-red-50 text-red-700 border-red-100 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900/30",
   };
 
   const statusLabels: Record<ShipmentStatus, string> = {

@@ -9,6 +9,7 @@ export interface SubmitOfferRequest {
   quoteEGP: number;
   estimatedDelivery?: string;
   description?: string;
+  coverage?: "Insured" | "None";
 }
 
 export interface RejectOfferRequest {

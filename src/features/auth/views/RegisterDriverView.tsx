@@ -56,6 +56,7 @@ export default function RegisterDriverView() {
             if (field) fieldErrors[field as string] = issue.message;
           });
           setErrors(fieldErrors);
+          setIsLoading(false);
           return;
         }
 
@@ -79,6 +80,7 @@ export default function RegisterDriverView() {
             if (field) fieldErrors[field as string] = issue.message;
           });
           setErrors(fieldErrors);
+          setIsLoading(false);
           return;
         }
 

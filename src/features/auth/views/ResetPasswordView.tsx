@@ -56,6 +56,7 @@ export default function ResetPasswordView() {
         });
 
         setErrors(fieldErrors);
+        setIsLoading(false);
         return;
       }
 

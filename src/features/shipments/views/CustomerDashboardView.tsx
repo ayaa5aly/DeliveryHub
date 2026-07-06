@@ -16,6 +16,47 @@ import { getCurrentUser } from "@/features/auth/api";
 
 import { useState, useEffect } from "react";
 
+function DashboardSkeleton() {
+  return (
+    <div className="flex flex-col gap-8 max-w-5xl mx-auto animate-pulse">
+      {/* Header Skeleton */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-col gap-2 w-full max-w-xs">
+          <div className="h-7 bg-zinc-200 dark:bg-zinc-800 rounded-lg w-3/4" />
+          <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded-lg w-1/2" />
+        </div>
+        <div className="h-10 bg-zinc-200 dark:bg-zinc-800 rounded-lg w-32 shrink-0" />
+      </div>
+
+      {/* Stats Grid Skeleton */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-28 bg-[var(--dh-bg-card)] border border-[var(--dh-border)] rounded-xl p-5 flex flex-col justify-between" >
+            <div className="flex justify-between items-start">
+              <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-20" />
+              <div className="h-8 w-8 rounded-lg bg-zinc-200 dark:bg-zinc-800" />
+            </div>
+            <div className="space-y-2 mt-2">
+              <div className="h-6 bg-zinc-200 dark:bg-zinc-800 rounded w-12" />
+              <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-24" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Shipments List Skeleton */}
+      <div className="flex flex-col gap-4.5 mt-2">
+        <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-36" />
+        <div className="flex flex-col gap-4">
+          {[1, 2].map((i) => (
+            <div key={i} className="h-32 bg-[var(--dh-bg-card)] border border-[var(--dh-border)] rounded-xl p-5 flex flex-col justify-between" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CustomerDashboardView() {
   const t = useTranslations("customer.dashboard");
   const locale = useLocale();
@@ -108,7 +149,7 @@ export default function CustomerDashboardView() {
 
   if (checkingAuth) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[var(--dh-bg-app)] text-[var(--dh-text-sub)] text-sm font-semibold">
+      <div className="flex items-center justify-center min-h-screen bg-[var(--dh-bg-app)] text-[var(--dh-text-sub)] text-sm font-semibold animate-pulse">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 rounded-full border-2 border-t-[var(--dh-brand)] border-[var(--dh-border)] animate-spin" />
           <span>{locale === 'ar' ? 'جاري التحقق من الصلاحيات...' : 'Verifying permissions...'}</span>
@@ -118,14 +159,7 @@ export default function CustomerDashboardView() {
   }
 
   if (!authorized || loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-[var(--dh-bg-app)] text-[var(--dh-text-sub)] text-sm font-semibold">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 rounded-full border-2 border-t-[var(--dh-brand)] border-[var(--dh-border)] animate-spin" />
-          <span>{locale === 'ar' ? 'جاري تحميل لوحة التحكم...' : 'Loading dashboard...'}</span>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
@@ -140,7 +174,7 @@ export default function CustomerDashboardView() {
 
         <Link
           href="/shipments/new"
-          className="flex items-center gap-2 px-4.5 py-2.5 rounded-lg text-xs font-bold bg-[var(--dh-brand)] hover:bg-[var(--dh-brand-hover)] text-white transition-all duration-200 shadow-md focus:outline-none"
+          className="flex items-center gap-2 px-4.5 py-2.5 rounded-lg text-xs font-bold bg-[var(--dh-brand)] hover:bg-[var(--dh-brand-hover)] text-white transition-all duration-200 shadow-md focus:outline-none hover:-translate-y-0.5"
         >
           <Plus className="h-4 w-4 stroke-[2.5]" />
           <span>{t("newShipment")}</span>
@@ -196,13 +230,22 @@ export default function CustomerDashboardView() {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center p-12 bg-[var(--dh-bg-card)] border border-[var(--dh-border)] border-dashed rounded-xl text-center">
-            <p className="text-xs text-[var(--dh-text-muted)]">{t("noActive")}</p>
+          <div className="flex flex-col items-center justify-center p-12 bg-[var(--dh-bg-card)] border border-[var(--dh-border)] border-dashed rounded-xl text-center shadow-sm">
+            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-[var(--dh-brand-subtle)] text-[var(--dh-brand)] mb-4">
+              <Package className="h-6 w-6 stroke-[1.5]" />
+            </div>
+            <h3 className="text-sm font-bold text-[var(--dh-text-main)] mb-1">
+              {locale === "ar" ? "لا توجد شحنات نشطة حالياً" : "No active shipments"}
+            </h3>
+            <p className="text-xs text-[var(--dh-text-muted)] max-w-sm mb-4">
+              {t("noActive")}
+            </p>
             <Link
               href="/shipments/new"
-              className="text-xs text-[var(--dh-brand)] hover:text-[var(--dh-brand-hover)] font-semibold mt-2 underline underline-offset-4"
+              className="inline-flex items-center gap-1.5 px-4.5 py-2.5 rounded-lg text-xs font-bold bg-[var(--dh-brand)] hover:bg-[var(--dh-brand-hover)] text-white transition-all duration-200 shadow-md focus:outline-none hover:-translate-y-0.5"
             >
-              {t("requestShipment")}
+              <Plus className="h-3.5 w-3.5 stroke-[2.5]" />
+              <span>{t("requestShipment")}</span>
             </Link>
           </div>
         )}

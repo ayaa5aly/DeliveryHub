@@ -133,10 +133,21 @@ export default function TrackingDetailView({ id, offerId }: TrackingDetailViewPr
   const displayProvider = captain
     ? {
         name: captain.name,
-        rating: 4.9,
-        avatarUrl: captain.avatar && captain.avatar.startsWith("http") ? captain.avatar : null,
+        rating: captain.rating !== undefined ? captain.rating : 5.0,
+        avatarUrl:
+          captain.avatar &&
+          (captain.avatar.startsWith("http") ||
+            captain.avatar.startsWith("/") ||
+            captain.avatar.startsWith("data:"))
+            ? captain.avatar
+            : null,
         initials: captain.name
-          ? captain.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)
+          ? captain.name
+              .split(" ")
+              .map((w: string) => w[0])
+              .join("")
+              .toUpperCase()
+              .slice(0, 2)
           : "?",
         role: t("captain"),
         phone: captain.phone,
@@ -145,7 +156,13 @@ export default function TrackingDetailView({ id, offerId }: TrackingDetailViewPr
     ? {
         name: selectedOffer.providerName,
         rating: selectedOffer.providerRating,
-        avatarUrl: null,
+        avatarUrl:
+          selectedOffer.providerAvatar &&
+          (selectedOffer.providerAvatar.startsWith("http") ||
+            selectedOffer.providerAvatar.startsWith("/") ||
+            selectedOffer.providerAvatar.startsWith("data:"))
+            ? selectedOffer.providerAvatar
+            : null,
         initials: selectedOffer.providerName
           .split(" ")
           .map((w) => w[0])

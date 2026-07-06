@@ -25,7 +25,7 @@ export async function reverseGeocode(lat: number, lng: number): Promise<string> 
       {
         headers: {
           'Accept-Language': 'ar,en',
-          'User-Agent': 'Delix-App',
+          'User-Agent': 'Tayar-App',
         },
       }
     );
@@ -71,7 +71,7 @@ export async function fetchAddressSuggestions(query: string, locale: string = 'a
       {
         headers: {
           'Accept-Language': `${locale === 'ar' ? 'ar' : 'en'},en`,
-          'User-Agent': 'Delix-App',
+          'User-Agent': 'Tayar-App',
         },
       }
     );

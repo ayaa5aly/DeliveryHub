@@ -10,6 +10,7 @@ import { mockCustomer } from "@/constants/mock-data";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocale } from "next-intl";
 import { getCustomerProfile, updateCustomerProfile, uploadAvatar } from "../api";
+import { useNotifications } from "@/shared/providers/socket-notification-provider";
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
@@ -17,6 +18,7 @@ export default function ProfileView() {
   const t = useTranslations("customer.profile");
   const validation = useTranslations("validation");
   const locale = useLocale();
+  const { triggerLocalToast } = useNotifications();
   const [activeTab, setActiveTab] = useState<"info" | "edit">("info");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -38,8 +40,13 @@ export default function ProfileView() {
       window.dispatchEvent(new Event("profile-updated"));
       setSuccessMessage(locale === 'ar' ? 'تم تحديث صورة الملف الشخصي!' : 'Profile photo updated successfully!');
       setTimeout(() => setSuccessMessage(""), 4000);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to upload avatar:", err);
+      triggerLocalToast(
+        locale === 'ar' ? 'خطأ في التحميل' : 'Upload Error',
+        locale === 'ar' ? 'فشل تحميل صورة الملف الشخصي. يرجى المحاولة مرة أخرى.' : 'Failed to upload profile photo. Please try again.',
+        'error'
+      );
     } finally {
       setIsUploading(false);
     }

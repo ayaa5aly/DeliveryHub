@@ -103,6 +103,7 @@ export default function Requests() {
   const [estHours, setEstHours] = React.useState<number | ''>(2)
   const [estMinutes, setEstMinutes] = React.useState<number | ''>('')
   const [description, setDescription] = React.useState('')
+  const [coverage, setCoverage] = React.useState<"Insured" | "None">("None")
   const [isLoading, setIsLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [successMessage, setSuccessMessage] = React.useState<string | null>(null)
@@ -114,6 +115,7 @@ export default function Requests() {
     setEstHours(2)
     setEstMinutes('')
     setDescription('')
+    setCoverage('None')
     setError(null)
     setSuccessMessage(null)
   }
@@ -153,19 +155,32 @@ export default function Requests() {
       return;
     }
 
+    // Convert estimated delivery time to total minutes and validate
+    const daysNum = estDays === '' ? 0 : estDays;
+    const hoursNum = estHours === '' ? 0 : estHours;
+    const minutesNum = estMinutes === '' ? 0 : estMinutes;
+    const totalMinutes = (daysNum * 24 * 60) + (hoursNum * 60) + minutesNum;
+
+    if (totalMinutes <= 0) {
+      setError(
+        locale === 'ar'
+          ? 'يرجى إدخال مدة التوصيل المتوقعة.'
+          : 'Please enter the estimated delivery time.'
+      );
+      return;
+    }
+
     setIsLoading(true)
     setError(null)
 
     try {
-      const daysNum = estDays === '' ? 0 : estDays;
-      const hoursNum = estHours === '' ? 0 : estHours;
-      const minutesNum = estMinutes === '' ? 0 : estMinutes;
       const estimatedDelivery = formatEstDelivery(daysNum, hoursNum, minutesNum, locale === 'ar');
       await submitOffer({
         requestId: activeRequest.id,
         quoteEGP: priceNum,
         estimatedDelivery,
         description,
+        coverage,
       })
 
       setSuccessMessage(t('offerSubmitSuccess'))
@@ -409,6 +424,21 @@ export default function Requests() {
                     />
                   </div>
                 </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+                  {locale === 'ar' ? 'تأمين الشحنة (التغطية)' : 'Shipment Insurance (Coverage)'}
+                </label>
+                <select
+                  className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-zinc-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 cursor-pointer"
+                  value={coverage}
+                  onChange={e => setCoverage(e.target.value as "Insured" | "None")}
+                  disabled={isLoading || !!successMessage}
+                >
+                  <option value="None">{locale === 'ar' ? 'بدون تأمين (بدون تغطية)' : 'No Insurance (None)'}</option>
+                  <option value="Insured">{locale === 'ar' ? 'مؤمنة (شامل التغطية)' : 'Insured (With Coverage)'}</option>
+                </select>
               </div>
 
               <div className="space-y-1">

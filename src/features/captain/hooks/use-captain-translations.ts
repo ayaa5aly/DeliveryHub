@@ -5,5 +5,5 @@ import { useTranslations } from "next-intl";
 export function useCaptainTranslations() {
   const translate = useTranslations("captain");
 
-  return (key: string) => translate(key as never);
+  return (key: string, values?: any) => translate(key as never, values);
 }

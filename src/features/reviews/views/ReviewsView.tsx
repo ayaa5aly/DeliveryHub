@@ -72,26 +72,26 @@ export default function ReviewsView() {
   );
 
   return (
-    <div className="flex flex-col gap-6 text-zinc-100 max-w-4xl mx-auto p-1">
+    <div className="flex flex-col gap-6 text-[var(--color-text-main)] max-w-4xl mx-auto p-1">
       <h1 className="text-xl font-bold tracking-tight">{t("title")}</h1>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center justify-between shadow-sm">
+        <div className="bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="flex flex-col">
-            <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+            <span className="text-[10px] text-[var(--dh-text-muted)] font-bold uppercase tracking-wider">
               {t("average")}
             </span>
-            <span className="text-3xl font-extrabold text-amber-400 mt-1">
+            <span className="text-3xl font-extrabold text-amber-400 mt-1" dir="ltr">
               {data?.averageRating ? `${data.averageRating.toFixed(1)} / 5` : "0.0 / 5"}
             </span>
           </div>
           <RatingStars rating={Math.round(data?.averageRating || 0)} size={18} />
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex items-center justify-between shadow-sm">
+        <div className="bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="flex flex-col">
-            <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+            <span className="text-[10px] text-[var(--dh-text-muted)] font-bold uppercase tracking-wider">
               {t("pending")}
             </span>
             <span className="text-3xl font-extrabold text-blue-500 mt-1">
@@ -109,15 +109,15 @@ export default function ReviewsView() {
         
         {/* Pending Reviews Section */}
         <div className="lg:col-span-1 flex flex-col gap-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 border-b border-zinc-800 pb-3">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--dh-text-muted)] border-b border-[var(--color-border)] pb-3">
             {t("pending")}
           </h2>
 
           <div className="flex flex-col gap-3">
             {pendingList.length === 0 ? (
-              <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-6 text-center flex flex-col items-center gap-2">
-                <CheckCircle className="h-8 w-8 text-zinc-600" />
-                <span className="text-xs text-zinc-500 font-medium">All caught up! No pending shipments to review.</span>
+              <div className="bg-[var(--color-bg-card)]/50 border border-[var(--color-border)]/80 rounded-xl p-6 text-center flex flex-col items-center gap-2">
+                <CheckCircle className="h-8 w-8 text-[var(--dh-text-muted)]" />
+                <span className="text-xs text-[var(--color-text-sub)] font-medium">All caught up! No pending shipments to review.</span>
               </div>
             ) : (
               pendingList.map((pending) => (
@@ -132,15 +132,15 @@ export default function ReviewsView() {
         </div>
 
         {/* History Section */}
-        <div className="lg:col-span-2 bg-zinc-900 border border-zinc-800 rounded-xl p-6 shadow-sm flex flex-col gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+        <div className="lg:col-span-2 bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl p-6 shadow-sm flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--color-border)] pb-3">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--dh-text-muted)]">
               {t("history")}
             </h2>
             
             {/* Search Input */}
             <div className="relative max-w-xs w-full">
-              <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-zinc-600">
+              <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-[var(--dh-text-muted)]">
                 <Search className="h-3.5 w-3.5" />
               </span>
               <input
@@ -151,14 +151,14 @@ export default function ReviewsView() {
                   setCurrentPage(1);
                 }}
                 placeholder="Search history..."
-                className="w-full text-[11px] bg-zinc-950 border border-zinc-800 rounded-lg pl-8 pr-3 py-1.5 text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-700 transition-colors"
+                className="w-full text-[11px] bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg pl-8 pr-3 py-1.5 text-[var(--color-text-main)] placeholder-[var(--dh-text-muted)] focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-5 min-h-[250px]">
             {paginatedReviews.length === 0 ? (
-              <div className="text-center py-12 text-zinc-650 text-xs font-medium">
+              <div className="text-center py-12 text-[var(--dh-text-muted)] text-xs font-medium">
                 No review history found.
               </div>
             ) : (
@@ -170,22 +170,22 @@ export default function ReviewsView() {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-zinc-850 pt-4 mt-2">
-              <span className="text-[10px] text-zinc-500 font-medium">
+            <div className="flex items-center justify-between border-t border-[var(--color-border)] pt-4 mt-2">
+              <span className="text-[10px] text-[var(--dh-text-muted)] font-medium">
                 Page {currentPage} of {totalPages}
               </span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="p-1.5 rounded-lg border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850 disabled:opacity-30 disabled:hover:bg-transparent transition-colors focus:outline-none"
+                  className="p-1.5 rounded-lg border border-[var(--color-border)] text-[var(--color-text-sub)] hover:text-[var(--color-text-main)] hover:bg-[var(--color-bg-muted)] disabled:opacity-30 disabled:hover:bg-transparent transition-colors focus:outline-none"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                 </button>
                 <button
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-1.5 rounded-lg border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850 disabled:opacity-30 disabled:hover:bg-transparent transition-colors focus:outline-none"
+                  className="p-1.5 rounded-lg border border-[var(--color-border)] text-[var(--color-text-sub)] hover:text-[var(--color-text-main)] hover:bg-[var(--color-bg-muted)] disabled:opacity-30 disabled:hover:bg-transparent transition-colors focus:outline-none"
                 >
                   <ArrowRight className="h-3.5 w-3.5" />
                 </button>

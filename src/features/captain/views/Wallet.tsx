@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { useCaptainTranslations } from '@/features/captain/hooks/use-captain-translations'
+import { useLocale } from 'next-intl'
 import { selectWallet, selectAccountType } from '@/features/captain/store/selectors'
 import { fetchCaptainDashboard } from '@/features/captain/store/data-slice'
 import { topUp, withdraw } from '@/features/wallet/api'
@@ -17,8 +18,8 @@ export default function Wallet() {
   const wallet = useAppSelector(selectWallet)
   const accountType = useAppSelector(selectAccountType)
 
-  // Language/RTL helper based on translation content
-  const isAr = t('withdrawBtn').includes('سحب')
+  const locale = useLocale()
+  const isRTL = locale === 'ar'
 
   // Modals state
   const [showDepositModal, setShowDepositModal] = useState(false)
@@ -36,20 +37,20 @@ export default function Wallet() {
   const [errorMessage, setErrorMessage] = useState('')
 
   const trans = {
-    totalAdded: isAr ? "إجمالي المضاف" : "Total Added",
-    totalPulled: isAr ? "إجمالي المسحوب" : "Total Pulled",
-    depositTitle: isAr ? "شحن المحفظة (إيداع)" : "Top-up Wallet (Deposit)",
-    withdrawTitle: isAr ? "سحب نقدي من المحفظة" : "Withdraw from Wallet",
-    amountLabel: isAr ? "المبلغ (EGP)" : "Amount (EGP)",
-    methodLabel: isAr ? "طريقة الدفع" : "Payment Method",
-    destinationLabel: isAr ? "رقم المحفظة / حساب البنك" : "Wallet / Bank Account",
-    cancelBtn: isAr ? "إلغاء" : "Cancel",
-    confirmBtn: isAr ? "تأكيد" : "Confirm",
-    insufficient: isAr ? "الرصيد غير كافٍ" : "Insufficient funds",
-    minAmount: isAr ? "الحد الأدنى هو 10 جنيه" : "Minimum amount is 10 EGP",
-    loading: isAr ? "جاري المعالجة..." : "Processing...",
-    depositSuccess: isAr ? "تم إرسال طلب الشحن بنجاح" : "Top-up request sent successfully",
-    withdrawSuccess: isAr ? "تم إرسال طلب السحب بنجاح" : "Withdrawal request sent successfully",
+    totalAdded: t('totalAddedLabel'),
+    totalPulled: t('totalPulledLabel'),
+    depositTitle: t('depositTitle'),
+    withdrawTitle: t('withdrawTitle'),
+    amountLabel: t('amountLabel'),
+    methodLabel: t('methodLabel'),
+    destinationLabel: t('destinationLabel'),
+    cancelBtn: t('cancel'),
+    confirmBtn: t('confirmBtn'),
+    insufficient: t('insufficientFunds'),
+    minAmount: t('minAmountError'),
+    loading: t('processing'),
+    depositSuccess: t('depositSuccess'),
+    withdrawSuccess: t('withdrawSuccessNotice'),
   }
 
   // Memoized sum of money added and pulled
@@ -137,7 +138,7 @@ export default function Wallet() {
   }
 
   return (
-    <div dir={isAr ? 'rtl' : 'ltr'}>
+    <div dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="mb-[22px]">
         <h1 className="text-[22px] font-extrabold text-[var(--color-text-main)] mb-1">{t('wallet_title')}</h1>
         <p className="text-[13px] text-[var(--color-text-sub)]">{t('wallet_sub')}</p>
@@ -145,14 +146,14 @@ export default function Wallet() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Wallet Main Card */}
-        <div className="lg:col-span-3 bg-gradient-to-br from-[#0F172A] to-[#1E3A5F] rounded-[16px] p-6 text-white shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div dir="ltr" style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E3A5F 100%)', color: '#ffffff' }} className="lg:col-span-3 rounded-[16px] p-6 shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-4">
             <div className="p-3.5 bg-white/10 rounded-xl">
               <WalletIcon className="h-7 w-7 text-blue-300" />
             </div>
             <div>
-              <p className="text-[12px] opacity-70 mb-1">{t('availableBalance')}</p>
-              <h2 className="text-[32px] font-extrabold leading-none">EGP {wallet.balanceEGP.toLocaleString()}.00</h2>
+              <p style={{ color: 'rgba(255, 255, 255, 0.7)' }} className="text-[12px] mb-1">{t('availableBalance')}</p>
+              <h2 style={{ color: '#ffffff' }} className="text-[32px] font-extrabold leading-none">EGP {wallet.balanceEGP.toLocaleString()}.00</h2>
             </div>
           </div>
 
@@ -165,7 +166,7 @@ export default function Wallet() {
               className="flex-1 md:flex-initial px-5 py-2.5 bg-blue-600 text-white text-[13px] font-bold rounded-xl hover:bg-blue-500 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-md shadow-blue-900/40"
             >
               <Plus className="h-4 w-4" />
-              <span>{isAr ? "إيداع / شحن" : "Deposit / Top-up"}</span>
+              <span>{t('depositTopupBtn')}</span>
             </button>
             <button 
               onClick={() => {
@@ -175,7 +176,7 @@ export default function Wallet() {
               className="flex-1 md:flex-initial px-5 py-2.5 bg-white text-[#0F172A] text-[13px] font-bold rounded-xl hover:bg-gray-100 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-md"
             >
               <ArrowUpRight className="h-4 w-4" />
-              <span>{isAr ? "سحب نقدي" : "Withdraw / Pull"}</span>
+              <span>{t('withdrawPullBtn')}</span>
             </button>
           </div>
         </div>
@@ -219,7 +220,7 @@ export default function Wallet() {
           <div className="flex flex-col divide-y divide-[var(--color-border)]">
             {(wallet.transactions || []).length === 0 ? (
               <div className="py-8 text-center text-xs text-[var(--color-text-sub)]">
-                {isAr ? "لا توجد معاملات مالية بعد" : "No transactions found"}
+                {t('noTransactionsFound')}
               </div>
             ) : (
               wallet.transactions.map((tx: WalletTransaction) => (
@@ -283,16 +284,16 @@ export default function Wallet() {
                   onChange={(e) => setDepositMethod(e.target.value)}
                   className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors"
                 >
-                  <option value="visa">{isAr ? "بطاقة فيزا" : "Visa Card"}</option>
-                  <option value="mastercard">{isAr ? "بطاقة ماستركارد" : "Mastercard"}</option>
-                  <option value="vodafone_cash">{isAr ? "فودافون كاش" : "Vodafone Cash"}</option>
+                  <option value="visa">{t('visaCard')}</option>
+                  <option value="mastercard">{t('mastercard')}</option>
+                  <option value="vodafone_cash">{t('vodafoneCash')}</option>
                 </select>
               </div>
 
               {depositMethod === 'vodafone_cash' && (
                 <div>
                   <label className="block text-xs font-bold text-[var(--color-text-sub)] uppercase tracking-wider mb-2">
-                    {isAr ? "رقم محفظة فودافون كاش" : "Vodafone Cash Number"}
+                    {t('vodafoneCashPhone')}
                   </label>
                   <input 
                     type="tel"
@@ -374,7 +375,7 @@ export default function Wallet() {
                   value={withdrawDest}
                   onChange={(e) => setWithdrawDest(e.target.value)}
                   className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                  placeholder={isAr ? "رقم محفظة كاش أو الحساب البنكي" : "e.g. 01012345678 or CIB Bank Account"}
+                  placeholder={t('withdrawDestPlaceholder')}
                 />
               </div>
 

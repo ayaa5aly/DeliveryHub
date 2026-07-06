@@ -35,7 +35,7 @@ export default function Profile() {
       const res = await uploadAvatar(file)
       dispatch(updateProfile({ avatar: res.url }))
       window.dispatchEvent(new Event("profile-updated"))
-      setSuccessMessage(locale === 'ar' ? 'تم تحديث صورة الملف الشخصي!' : 'Profile photo updated successfully!')
+      setSuccessMessage(t('avatarUpdatedSuccess'))
       setTimeout(() => setSuccessMessage(''), 4000)
     } catch (err) {
       console.error("Failed to upload avatar:", err)
@@ -64,7 +64,7 @@ export default function Profile() {
       const data = await updateProviderProfile({ name, phone })
       dispatch(updateProfile(data))
       window.dispatchEvent(new Event("profile-updated"))
-      setSuccessMessage(locale === 'ar' ? 'تم تحديث الملف الشخصي بنجاح!' : 'Profile updated successfully!')
+      setSuccessMessage(t('profileUpdatedSuccess'))
       setActiveTab('info')
       setTimeout(() => setSuccessMessage(''), 4000)
     } catch (err) {
@@ -74,9 +74,9 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[300px] text-zinc-400 text-sm font-semibold">
-        <div className="h-6 w-6 rounded-full border-2 border-t-blue-500 border-zinc-800 animate-spin mr-2" />
-        <span>{locale === 'ar' ? 'جاري تحميل الملف الشخصي...' : 'Loading profile...'}</span>
+      <div className="flex items-center justify-center min-h-[300px] text-[var(--color-text-sub)] text-sm font-semibold">
+        <div className="h-6 w-6 rounded-full border-2 border-t-blue-500 border-[var(--color-border)] animate-spin mr-2" />
+        <span>{t('loadingProfile')}</span>
       </div>
     )
   }
@@ -93,11 +93,11 @@ export default function Profile() {
   const isOffice = accountType === 'office'
 
   return (
-    <div className="flex flex-col gap-6 text-zinc-100 max-w-3xl mx-auto">
+    <div className="flex flex-col gap-6 text-[var(--color-text-main)] max-w-3xl mx-auto">
       {/* Title */}
       <div>
         <h1 className="text-xl font-bold tracking-tight">{t('profile_title')}</h1>
-        <p className="text-xs text-zinc-500 mt-1">{t('profile_sub')}</p>
+        <p className="text-xs text-[var(--color-text-sub)] mt-1">{t('profile_sub')}</p>
       </div>
 
       {/* Success Notification */}
@@ -111,7 +111,7 @@ export default function Profile() {
       {/* Layout Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         {/* Left Side Profile Summary */}
-        <div className="md:col-span-4 bg-zinc-900 border border-zinc-800 rounded-xl p-6 flex flex-col items-center text-center gap-4 shadow-sm">
+        <div className="md:col-span-4 bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl p-6 flex flex-col items-center text-center gap-4 shadow-sm">
           <div className="relative group">
             <input
               type="file"
@@ -122,7 +122,7 @@ export default function Profile() {
               disabled={isUploading}
             />
             <div
-              className={`flex items-center justify-center h-20 w-20 rounded-full overflow-hidden border-4 border-zinc-850 bg-zinc-800 text-white font-extrabold text-2xl relative transition-all duration-200 group-hover:border-zinc-700 ${
+              className={`flex items-center justify-center h-20 w-20 rounded-full overflow-hidden border-4 border-[var(--color-border)] bg-[var(--color-bg-muted)] text-white font-extrabold text-2xl relative transition-all duration-200 group-hover:border-blue-500 ${
                 isUploading ? 'animate-pulse opacity-60' : ''
               }`}
             >
@@ -141,16 +141,16 @@ export default function Profile() {
                   <button
                     type="button"
                     onClick={() => setShowPreview(true)}
-                    className="p-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white transition-colors focus:outline-none"
-                    title={locale === 'ar' ? 'عرض الصورة' : 'View Photo'}
+                    className="p-1.5 rounded-full bg-[var(--color-bg-card)] hover:bg-[var(--color-bg-muted)] text-white transition-colors focus:outline-none"
+                    title={t('viewPhoto')}
                   >
                     <Eye className="h-4 w-4" />
                   </button>
                 )}
                 <label
                   htmlFor="avatarInput"
-                  className="p-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white transition-colors cursor-pointer"
-                  title={locale === 'ar' ? 'تغيير الصورة' : 'Change Photo'}
+                  className="p-1.5 rounded-full bg-[var(--color-bg-card)] hover:bg-[var(--color-bg-muted)] text-white transition-colors cursor-pointer"
+                  title={t('changePhoto')}
                 >
                   <Camera className="h-4 w-4" />
                 </label>
@@ -158,45 +158,45 @@ export default function Profile() {
             </div>
           </div>
           <div className="flex flex-col">
-            <span className="text-base font-bold text-zinc-200">{profile.name}</span>
-            <span className="text-[10px] text-zinc-500 mt-1 uppercase tracking-wider font-bold">
+            <span className="text-base font-bold text-[var(--color-text-main)]">{profile.name}</span>
+            <span className="text-[10px] text-[var(--dh-text-muted)] mt-1 uppercase tracking-wider font-bold">
               {t(isOffice ? 'accountType_office' : 'accountType_captain')}
             </span>
           </div>
           {verification.isVerified ? (
             <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              {locale === 'ar' ? 'حساب موثق' : 'Verified'}
+              {t('verifiedBadge')}
             </span>
           ) : (
             <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-              {locale === 'ar' ? 'غير موثق بعد' : 'Not Verified'}
+              {t('notVerifiedBadge')}
             </span>
           )}
         </div>
 
         {/* Right Side Settings Tabs */}
-        <div className="md:col-span-8 bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-sm flex flex-col">
+        <div className="md:col-span-8 bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-xl overflow-hidden shadow-sm flex flex-col">
           {/* Tab Header Selector */}
-          <div className="flex border-b border-zinc-800 bg-zinc-950/40">
+          <div className="flex border-b border-[var(--color-border)] bg-[var(--color-bg-muted)]/40">
             <button
               onClick={() => setActiveTab('info')}
               className={`flex-1 py-3.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2 focus:outline-none ${
                 activeTab === 'info'
-                  ? "border-blue-500 text-blue-500 bg-zinc-900/50"
-                  : "border-transparent text-zinc-500 hover:text-zinc-300"
+                  ? "border-blue-500 text-blue-500 bg-[var(--color-bg-muted)]/50"
+                  : "border-transparent text-[var(--dh-text-muted)] hover:text-[var(--color-text-sub)]"
               }`}
             >
-              {locale === 'ar' ? 'نظرة عامة' : 'Overview'}
+              {t('overviewTab')}
             </button>
             <button
               onClick={() => setActiveTab('edit')}
               className={`flex-1 py-3.5 text-xs font-bold uppercase tracking-wider transition-all border-b-2 focus:outline-none ${
                 activeTab === 'edit'
-                  ? "border-blue-500 text-blue-500 bg-zinc-900/50"
-                  : "border-transparent text-zinc-500 hover:text-zinc-300"
+                  ? "border-blue-500 text-blue-500 bg-[var(--color-bg-muted)]/50"
+                  : "border-transparent text-[var(--dh-text-muted)] hover:text-[var(--color-text-sub)]"
               }`}
             >
-              {locale === 'ar' ? 'تعديل البيانات' : 'Edit'}
+              {t('editTab')}
             </button>
           </div>
 
@@ -204,58 +204,58 @@ export default function Profile() {
           <div className="p-6">
             {activeTab === 'info' ? (
               <div className="flex flex-col gap-5">
-                <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
-                  {locale === 'ar' ? 'تفاصيل الحساب' : 'Account Details'}
+                <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--dh-text-muted)]">
+                  {t('accountDetailsTitle')}
                 </h2>
 
                 <div className="flex flex-col gap-4 text-xs">
                   <div className="flex items-center gap-3">
-                    <User className="h-4 w-4 text-zinc-500 shrink-0" />
+                    <User className="h-4 w-4 text-[var(--dh-text-muted)] shrink-0" />
                     <div className="flex flex-col">
-                      <span className="text-zinc-500 font-medium">{t('legalName')}</span>
-                      <span className="text-zinc-200 font-semibold mt-0.5">{profile.name}</span>
+                      <span className="text-[var(--dh-text-muted)] font-medium">{t('legalName')}</span>
+                      <span className="text-[var(--color-text-main)] font-semibold mt-0.5">{profile.name}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <Phone className="h-4 w-4 text-zinc-500 shrink-0" />
+                    <Phone className="h-4 w-4 text-[var(--dh-text-muted)] shrink-0" />
                     <div className="flex flex-col">
-                      <span className="text-zinc-500 font-medium">{t('contactNumber')}</span>
-                      <span className="text-zinc-200 font-semibold mt-0.5">{profile.phone}</span>
+                      <span className="text-[var(--dh-text-muted)] font-medium">{t('contactNumber')}</span>
+                      <span className="text-[var(--color-text-main)] font-semibold mt-0.5">{profile.phone}</span>
                     </div>
                   </div>
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSave} className="flex flex-col gap-4">
-                <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1">
-                  {locale === 'ar' ? 'تحديث معلومات الملف الشخصي' : 'Update Profile Information'}
+                <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--dh-text-muted)] mb-1">
+                  {t('updateProfileTitle')}
                 </h2>
 
                 {/* Name Input */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold text-zinc-400">
+                  <label className="text-xs font-semibold text-[var(--color-text-sub)]">
                     {t('legalName')}
                   </label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-zinc-950 border border-zinc-850 rounded-lg px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-700 transition-colors"
+                    className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg px-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder={profile.name}
                   />
                 </div>
 
                 {/* Phone Input */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold text-zinc-400">
+                  <label className="text-xs font-semibold text-[var(--color-text-sub)]">
                     {t('contactNumber')}
                   </label>
                   <input
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-zinc-950 border border-zinc-850 rounded-lg px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-zinc-700 transition-colors"
+                    className="w-full bg-[var(--color-bg-muted)] border border-[var(--color-border)] rounded-lg px-4 py-2.5 text-xs text-[var(--color-text-main)] focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder={profile.phone}
                   />
                 </div>
@@ -279,19 +279,19 @@ export default function Profile() {
           onClick={() => setShowPreview(false)}
         >
           <div 
-            className="relative max-w-lg w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-2 overflow-hidden shadow-2xl flex flex-col items-center animate-in fade-in zoom-in-95 duration-200"
+            className="relative max-w-lg w-full bg-[var(--color-bg-card)] border border-[var(--color-border)] rounded-2xl p-2 overflow-hidden shadow-2xl flex flex-col items-center animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-full flex justify-between items-center px-4 py-2.5 border-b border-zinc-800 bg-zinc-950/40">
-              <span className="text-xs font-bold text-zinc-300">{locale === 'ar' ? 'عرض الصورة الشخصية' : 'View Profile Photo'}</span>
+            <div className="w-full flex justify-between items-center px-4 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-bg-muted)]/40">
+              <span className="text-xs font-bold text-[var(--color-text-main)]">{t('viewProfilePhotoTitle')}</span>
               <button 
                 onClick={() => setShowPreview(false)}
-                className="text-zinc-400 hover:text-zinc-200 text-xs font-bold px-2.5 py-1 rounded-lg hover:bg-zinc-800 transition-colors focus:outline-none"
+                className="text-[var(--dh-text-muted)] hover:text-[var(--color-text-main)] text-xs font-bold px-2.5 py-1 rounded-lg hover:bg-[var(--color-bg-muted)] transition-colors focus:outline-none"
               >
-                {locale === 'ar' ? 'إغلاق' : 'Close'}
+                {t('closeBtn')}
               </button>
             </div>
-            <div className="flex items-center justify-center p-6 w-full aspect-square bg-zinc-950/20">
+            <div className="flex items-center justify-center p-6 w-full aspect-square bg-[var(--color-bg-muted)]/20">
               <img 
                 src={profile.avatar} 
                 alt={profile.name} 

@@ -13,6 +13,7 @@ import { createShipment } from "@/features/shipments";
 import { getWallet } from "@/features/wallet/api";
 import { calculateDistance, reverseGeocode, fetchAddressSuggestions, type MapSuggestion } from "@/lib/utils/map";
 import dynamic from "next/dynamic";
+import { useNotifications } from "@/shared/providers/socket-notification-provider";
 
 const MapView = dynamic(() => import("@/shared/ui/MapView"), {
   ssr: false,
@@ -84,6 +85,7 @@ export default function NewShipmentView() {
   const validation = useTranslations("validation");
   const router = useRouter();
   const locale = useLocale();
+  const { triggerLocalToast } = useNotifications();
   
   const getValidationError = (messageKey: string | undefined) => {
     if (!messageKey) return "";
@@ -129,7 +131,11 @@ export default function NewShipmentView() {
 
   const handleGetCurrentLocation = (field: 'pickup' | 'delivery') => {
     if (!navigator.geolocation) {
-      alert(locale === 'ar' ? 'تحديد الموقع الجغرافي غير مدعوم في متصفحك' : 'Geolocation is not supported by your browser');
+      triggerLocalToast(
+        locale === 'ar' ? 'خطأ في تحديد الموقع' : 'Location Error',
+        locale === 'ar' ? 'تحديد الموقع الجغرافي غير مدعوم في متصفحك' : 'Geolocation is not supported by your browser',
+        'error'
+      );
       return;
     }
 
@@ -160,10 +166,12 @@ export default function NewShipmentView() {
       },
       (error) => {
         console.error("Error getting geolocation:", error);
-        alert(
+        triggerLocalToast(
+          locale === 'ar' ? 'خطأ في تحديد الموقع' : 'Location Error',
           locale === 'ar' 
             ? 'فشل في الحصول على موقعك. يرجى التأكد من السماح بالوصول للموقع.' 
-            : 'Failed to retrieve your location. Please check your location permissions.'
+            : 'Failed to retrieve your location. Please check your location permissions.',
+          'error'
         );
         setValue(field === 'pickup' ? 'pickupAddress' : 'deliveryAddress', '');
         setDetectingLocation(null);
@@ -177,6 +185,7 @@ export default function NewShipmentView() {
     handleSubmit,
     control,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<ShipmentFormValues>({
     resolver: zodResolver(shipmentRequestSchema),
@@ -245,27 +254,45 @@ export default function NewShipmentView() {
   // Automatically set deliveryAddress to device location on load
   useEffect(() => {
     if (navigator.geolocation) {
-      setValue('deliveryAddress', locale === 'ar' ? 'جاري تحديد موقعك الحالي...' : 'Locating your current location...');
+      const currentVal = getValues('deliveryAddress');
+      if (!currentVal) {
+        setValue('deliveryAddress', locale === 'ar' ? 'جاري تحديد موقعك الحالي...' : 'Locating your current location...');
+      }
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
           try {
-            const address = await reverseGeocode(latitude, longitude);
-            setDeliveryCoords([latitude, longitude]);
-            setValue('deliveryAddress', address, { shouldValidate: true });
+            const latestVal = getValues('deliveryAddress');
+            const loadingMsgAr = 'جاري تحديد موقعك الحالي...';
+            const loadingMsgEn = 'Locating your current location...';
+            if (!latestVal || latestVal === loadingMsgAr || latestVal === loadingMsgEn) {
+              const address = await reverseGeocode(latitude, longitude);
+              setDeliveryCoords([latitude, longitude]);
+              setValue('deliveryAddress', address, { shouldValidate: true });
+            }
           } catch (err) {
             console.error("Error auto-fetching delivery address:", err);
-            setValue('deliveryAddress', '');
+            const latestVal = getValues('deliveryAddress');
+            const loadingMsgAr = 'جاري تحديد موقعك الحالي...';
+            const loadingMsgEn = 'Locating your current location...';
+            if (latestVal === loadingMsgAr || latestVal === loadingMsgEn) {
+              setValue('deliveryAddress', '');
+            }
           }
         },
         (err) => {
           console.warn("Auto geolocation on load blocked or failed:", err);
-          setValue('deliveryAddress', '');
+          const latestVal = getValues('deliveryAddress');
+          const loadingMsgAr = 'جاري تحديد موقعك الحالي...';
+          const loadingMsgEn = 'Locating your current location...';
+          if (latestVal === loadingMsgAr || latestVal === loadingMsgEn) {
+            setValue('deliveryAddress', '');
+          }
         },
         { enableHighAccuracy: true, timeout: 10000 }
       );
     }
-  }, [setValue, locale]);
+  }, [setValue, locale, getValues]);
 
   // Debounced search for pickup address suggestions
   useEffect(() => {
@@ -518,7 +545,10 @@ export default function NewShipmentView() {
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => handleSelectSuggestion('pickup', item)}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleSelectSuggestion('pickup', item);
+                      }}
                       className="w-full text-start px-4 py-3 text-xs text-[var(--dh-text-sub)] hover:text-[var(--dh-text-main)] hover:bg-[var(--dh-bg-muted)] transition-colors flex items-start gap-2.5"
                     >
                       <MapPin className="h-3.5 w-3.5 mt-0.5 text-rose-500 shrink-0" />
@@ -573,7 +603,10 @@ export default function NewShipmentView() {
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => handleSelectSuggestion('delivery', item)}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleSelectSuggestion('delivery', item);
+                      }}
                       className="w-full text-start px-4 py-3 text-xs text-[var(--dh-text-sub)] hover:text-[var(--dh-text-main)] hover:bg-[var(--dh-bg-muted)] transition-colors flex items-start gap-2.5"
                     >
                       <MapPin className="h-3.5 w-3.5 mt-0.5 text-emerald-500 shrink-0" />

@@ -47,6 +47,7 @@ export default function RegisterCustomerView() {
           if (field) fieldErrors[field as string] = issue.message;
         });
         setErrors(fieldErrors);
+        setIsLoading(false);
         return;
       }
 
